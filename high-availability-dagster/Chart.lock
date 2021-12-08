@@ -1,0 +1,27 @@
+dependencies:
+- name: traefik
+  repository: https://helm.traefik.io/traefik
+  version: 10.7.1
+- name: oauth2-proxy
+  repository: https://oauth2-proxy.github.io/manifests
+  version: 5.0.6
+- name: dagster-user-deployments
+  repository: https://dagster-io.github.io/helm
+  version: 0.12.5
+- name: dagster
+  repository: https://dagster-io.github.io/helm
+  version: 0.12.5
+- name: cluster-autoscaler
+  repository: https://kubernetes.github.io/autoscaler
+  version: 9.10.8
+- name: loki
+  repository: https://grafana.github.io/helm-charts
+  version: 2.8.1
+- name: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 23.1.5
+- name: fluent-bit
+  repository: https://fluent.github.io/helm-charts
+  version: 0.19.9
+digest: sha256:d2404734cce1179681215e90d32e655063ba66ee89b86a7081e991f0736baed1
+generated: "2021-12-09T15:22:23.54406Z"

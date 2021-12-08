@@ -1,0 +1,7 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: ucd-ci-example-puller
+data:
+  .dockerconfigjson: {{ .Values.gitlabDockerBase64 }}
+type: kubernetes.io/dockerconfigjson

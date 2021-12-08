@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  AWS_ACCESS_KEY_ID: {{ .Values.s3AccessKeyId }}
+  AWS_SECRET_ACCESS_KEY: {{ .Values.s3SecretAccessKey }}
+kind: Secret
+metadata:
+  name: dagster-s3-storage-iam-creds
+type: Opaque

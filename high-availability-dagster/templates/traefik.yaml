@@ -1,0 +1,63 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroute
+spec:
+  entryPoints:
+    - web
+  routes:                           # [2]
+  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.dagsterHost }}`) # [3]
+    services:
+    - kind: Service
+      name: faculty-dagster-dagit
+      namespace: faculty-dagster
+      passHostHeader: true
+      port: 80  
+  - kind: Rule                    # [9]  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.traefikHost }}`) # [3]
+    # middlewares:
+    # - name: add-dashboard
+    services:
+    - kind: TraefikService
+      name: api@internal 
+  - kind: Rule                    # [9]  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.flowerHost }}`) # [3]
+    services:
+    - kind: Service
+      name: faculty-dagster-flower-service
+      namespace: faculty-dagster
+      passHostHeader: true
+      port: 80 
+  - kind: Rule                    # [9]  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.grafanaHost }}`) # [3]
+    services:
+    - kind: Service
+      name: faculty-dagster-grafana
+      namespace: faculty-dagster
+      passHostHeader: true
+      port: 80
+  - kind: Rule                    # [9]  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.prometheusHost }}`) # [3]
+    services:
+    - kind: Service
+      name: faculty-dagster-kube-prome-prometheus
+      namespace: faculty-dagster
+      passHostHeader: true
+      port: 9090    
+  - kind: Rule                    # [9]  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.rabbitmqHost }}`) # [3]
+    services:
+    - kind: Service
+      name: faculty-dagster-rabbitmq
+      namespace: faculty-dagster
+      passHostHeader: true
+      port: 15672     # [9]
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: Middleware
+# metadata:
+#   name: add-dashboard
+# spec:
+#   addPrefix:
+#     prefix: /dashboard/

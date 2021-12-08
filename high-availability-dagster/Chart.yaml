@@ -1,0 +1,34 @@
+apiVersion: v2
+name: high-availability-dagster
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "0.12.8"
+dependencies:
+  # - name: aws-load-balancer-controller
+  #   version: 1.3.2
+  #   repository: "https://aws.github.io/eks-charts"
+  - name: traefik
+    version: 10.7.1
+    repository: "https://helm.traefik.io/traefik"
+  - name: oauth2-proxy
+    version: 5.0.6
+    repository: "https://oauth2-proxy.github.io/manifests"
+  - name: dagster-user-deployments
+    version: "0.12.5"
+    repository: "https://dagster-io.github.io/helm"
+  - name: dagster
+    version: "0.12.5"
+    repository: "https://dagster-io.github.io/helm"
+  - name: cluster-autoscaler
+    version: "9.10.8"
+    repository: "https://kubernetes.github.io/autoscaler"
+  - name: loki
+    version: "2.8.1"
+    repository: "https://grafana.github.io/helm-charts"
+  - name: kube-prometheus-stack
+    version: "23.1.5"
+    repository: "https://prometheus-community.github.io/helm-charts"
+  - name: fluent-bit
+    repository: https://fluent.github.io/helm-charts
+    version: "0.19.9"

@@ -1,0 +1,9 @@
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: traefik
+spec:
+  serviceRef:
+    name: oauth2-proxy-nodeport
+    port: 80
+  targetGroupARN: {{ .Values.targetGroupARN }}
