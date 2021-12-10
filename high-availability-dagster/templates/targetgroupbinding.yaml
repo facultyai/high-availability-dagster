@@ -1,7 +1,14 @@
+# Problem: this triggers an error if installed in same chart as the controller 
+# related? https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2071
+
 apiVersion: elbv2.k8s.aws/v1beta1
 kind: TargetGroupBinding
 metadata:
-  name: traefik
+  name: targetgroup
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
 spec:
   serviceRef:
     name: oauth2-proxy-nodeport

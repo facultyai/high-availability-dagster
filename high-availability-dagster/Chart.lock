@@ -1,4 +1,7 @@
 dependencies:
+- name: aws-load-balancer-controller
+  repository: https://aws.github.io/eks-charts
+  version: 1.3.3
 - name: traefik
   repository: https://helm.traefik.io/traefik
   version: 10.7.1
@@ -23,5 +26,5 @@ dependencies:
 - name: fluent-bit
   repository: https://fluent.github.io/helm-charts
   version: 0.19.9
-digest: sha256:d2404734cce1179681215e90d32e655063ba66ee89b86a7081e991f0736baed1
-generated: "2021-12-09T15:22:23.54406Z"
+digest: sha256:a437db6fb85f93efe1ac02bb3e57fc9346d00b5283edc0823dba2ba844d1e9a3
+generated: "2021-12-10T11:20:17.987595Z"
