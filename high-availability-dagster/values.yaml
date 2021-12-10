@@ -1,0 +1,234 @@
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+aws-load-balancer-controller:
+  serviceAccount:
+    name: aws-load-balancer-controller
+    create: false
+
+traefik:
+  ports:
+    traefik:
+      expose: true
+      exposedPort: 9000
+    websecure:
+      expose: false
+  service:
+    type: ClusterIP
+  logs:
+    general:
+      level: DEBUG
+    access:
+      enabled: true
+
+
+dagster-user-deployments:
+  dagsterHome: "/opt/dagster/dagster_home"
+  postgresqlSecretName: "dagster-postgresql-secret" # This is created by dagster.
+  imagePullSecrets:
+    - name: ucd-ci-example-puller
+
+  deployments:
+    - name: dagster-ucd-ci-example
+      nodeSelector:
+        instanceGroup: dagster-services
+      tolerations:
+        - effect: NoSchedule
+          key: instanceGroup
+          operator: Equal
+          value: dagster-services
+      envSecrets:
+        - name: dagster-s3-storage-iam-creds
+      dagsterApiGrpcArgs:
+        - -f
+        - /opt/dagster/app/pipeline.py
+      image:
+        pullPolicy: Always
+        repository: null
+        tag: null
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 0
+        periodSeconds: 20
+        successThreshold: 1
+        timeoutSeconds: 3
+      port: 3034
+      startupProbe:
+        enabled: false
+
+dagster:
+  dagit:
+    image:
+      tag: 0.12.5
+    replicaCount: 2
+    workspace:
+      enabled: true
+      servers:
+        - host: "dagster-ucd-ci-example"
+          port: 3034
+    envSecrets:
+      - name: dagster-s3-storage-iam-creds
+    nodeSelector:
+      instanceGroup: dagster-services
+    tolerations:
+    - effect: NoSchedule
+      key: instanceGroup
+      operator: Equal
+      value: dagster-services
+    startupProbe:
+      enabled: false
+    resources:
+      limits:
+        cpu: 2
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 286Mi
+  dagsterDaemon:
+    image:
+      tag: 0.12.5
+    affinity: {}
+    annotations: {}
+    enabled: true
+    nodeSelector:
+      instanceGroup: dagster-services
+    podSecurityContext: {}
+    queuedRunCoordinator:
+      enabled: true
+      module: dagster.core.run_coordinator
+      class: QueuedRunCoordinator
+      config:
+        max_concurrent_runs: 30
+    envSecrets: 
+      - name: dagster-s3-storage-iam-creds
+    resources: {}
+    securityContext: {}
+    tolerations:
+    - effect: NoSchedule
+      key: instanceGroup
+      operator: Equal
+      value: dagster-services
+    startupProbe:
+      enabled: false
+  flower:
+    enabled: true
+    nodeSelector:
+      instanceGroup: dagster-services
+    tolerations:
+    - effect: NoSchedule
+      key: instanceGroup
+      operator: Equal
+      value: dagster-services
+    service:
+      annotations: {}
+      port: 80
+      type: ClusterIP
+  postgresql:
+    enabled: true
+    postgresqlDatabase: dagster
+    postgresqlUsername: postgres
+  rabbitmq:
+    enabled: true
+    nodeSelector:
+      instanceGroup: dagster-services
+    erlangCookie: "cookie" # prevent randomness
+    tolerations:
+    - effect: NoSchedule
+      key: instanceGroup
+      operator: Equal
+      value: dagster-services
+  runLauncher:
+    type: CeleryK8sRunLauncher
+    config:
+      celeryK8sRunLauncher:
+        configSource:
+          worker_concurrency: 32
+        image:
+          tag: 0.12.5
+        workerQueues:
+          - name: dagster
+            replicaCount: 2
+            labels: {}
+        nodeSelector:
+          instanceGroup: dagster-services
+        tolerations:
+        - effect: NoSchedule
+          key: instanceGroup
+          operator: Equal
+          value: dagster-services
+  computeLogManager:
+    type: S3ComputeLogManager
+    config:
+      s3ComputeLogManager:
+        bucket: faculty-dagster
+        prefix: compute-logs
+  dagster-user-deployments:
+    enableSubchart: false
+
+cluster-autoscaler:
+  extraArgs:
+    balance-similar-node-groups: true
+    skip-nodes-with-system-pods: false
+  rbac:
+    serviceAccount:
+      create: false
+      name: cluster-autoscaler
+  podAnnotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+
+
+kube-prometheus-stack:
+  grafana:
+    serviceAccount:
+      create: false
+      name: grafana-cloudwatch
+    dashboardsConfigMaps:
+      fluent-bit: faculty-dagster-fluent-bit
+    grafana.ini:
+      auth.anonymous:
+        enabled: true
+        org_name: Main Org.
+        org_role: Admin
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          url: http://faculty-dagster-loki:3100
+          access: proxy
+        - name: CloudWatch
+          type: cloudwatch
+          access: proxy
+          uid: cloudwatch
+          editable: false
+          jsonData:
+            authType: default
+            defaultRegion: eu-west-1
+
+fluent-bit:
+  serviceMonitor:
+    enabled: true
+  dashboards:
+    enabled: true
+  config:
+    
+      # [INPUT]
+      #     Name    tail
+      #     Tag     kube.*
+      #     Path    /var/log/containers/*.log
+      #     Parser  docker
+   outputs: |
+      [INPUT]
+          Name            systemd
+          Tag             host.*
+
+      [OUTPUT]
+          name                   loki
+          match                  *
+          host                   faculty-dagster-loki
+          port                   3100
+          labels                 job=fluentbit    
+          auto_kubernetes_labels on
