@@ -18,12 +18,12 @@ vpc:
   subnets:
     public:
       az1:
-        id: x
+        id: SUBNET_1_ID
       az2:
-        id: y
+        id: SUBNET_2_ID
       az3:
-        id: z
-  
+        id: SUBNET_3_ID
+
 managedNodeGroups:
   - name: dagster-c5-4xlarge
     instanceType: c5.4xlarge
