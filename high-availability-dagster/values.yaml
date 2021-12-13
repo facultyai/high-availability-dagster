@@ -23,41 +23,6 @@ traefik:
     access:
       enabled: true
 
-
-dagster-user-deployments:
-  dagsterHome: "/opt/dagster/dagster_home"
-  postgresqlSecretName: "dagster-postgresql-secret" # This is created by dagster.
-  imagePullSecrets:
-    - name: ucd-ci-example-puller
-
-  deployments:
-    - name: dagster-ucd-ci-example
-      nodeSelector:
-        instanceGroup: dagster-services
-      tolerations:
-        - effect: NoSchedule
-          key: instanceGroup
-          operator: Equal
-          value: dagster-services
-      envSecrets:
-        - name: dagster-s3-storage-iam-creds
-      dagsterApiGrpcArgs:
-        - -f
-        - /opt/dagster/app/pipeline.py
-      image:
-        pullPolicy: Always
-        repository: null
-        tag: null
-      livenessProbe:
-        failureThreshold: 3
-        initialDelaySeconds: 0
-        periodSeconds: 20
-        successThreshold: 1
-        timeoutSeconds: 3
-      port: 3034
-      startupProbe:
-        enabled: false
-
 dagster:
   dagit:
     image:
@@ -165,7 +130,11 @@ dagster:
         bucket: faculty-dagster
         prefix: compute-logs
   dagster-user-deployments:
-    enableSubchart: false
+    dagsterHome: "/opt/dagster/dagster_home"
+    postgresqlSecretName: "dagster-postgresql-secret" # This is created by dagster.
+    imagePullSecrets:
+      - name: ucd-ci-example-puller
+
 
 cluster-autoscaler:
   extraArgs:

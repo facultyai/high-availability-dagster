@@ -8,9 +8,6 @@ dependencies:
 - name: oauth2-proxy
   repository: https://oauth2-proxy.github.io/manifests
   version: 5.0.6
-- name: dagster-user-deployments
-  repository: https://dagster-io.github.io/helm
-  version: 0.12.5
 - name: dagster
   repository: https://dagster-io.github.io/helm
   version: 0.12.5
@@ -26,5 +23,5 @@ dependencies:
 - name: fluent-bit
   repository: https://fluent.github.io/helm-charts
   version: 0.19.9
-digest: sha256:a437db6fb85f93efe1ac02bb3e57fc9346d00b5283edc0823dba2ba844d1e9a3
-generated: "2021-12-10T11:20:17.987595Z"
+digest: sha256:7749ed48af71c44e8522e5fa5dda6991b45f546a9511da9b6c78a3700a85fa24
+generated: "2021-12-13T10:22:05.674431Z"
