@@ -2,15 +2,15 @@ dependencies:
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
   version: 1.3.3
+- name: aws-node-termination-handler
+  repository: https://aws.github.io/eks-charts
+  version: 0.16.0
 - name: traefik
   repository: https://helm.traefik.io/traefik
   version: 10.7.1
 - name: oauth2-proxy
   repository: https://oauth2-proxy.github.io/manifests
   version: 5.0.6
-- name: dagster-user-deployments
-  repository: https://dagster-io.github.io/helm
-  version: 0.12.5
 - name: dagster
   repository: https://dagster-io.github.io/helm
   version: 0.12.5
@@ -26,5 +26,5 @@ dependencies:
 - name: fluent-bit
   repository: https://fluent.github.io/helm-charts
   version: 0.19.9
-digest: sha256:a437db6fb85f93efe1ac02bb3e57fc9346d00b5283edc0823dba2ba844d1e9a3
-generated: "2021-12-10T11:20:17.987595Z"
+digest: sha256:8ee77c6fc99d44e8e481992e16816d8c8ecece340a27defcab4c82e818beca22
+generated: "2021-12-13T11:48:22.465037Z"

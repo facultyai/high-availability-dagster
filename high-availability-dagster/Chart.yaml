@@ -8,15 +8,15 @@ dependencies:
   - name: aws-load-balancer-controller
     version: "1.3.3"
     repository: "https://aws.github.io/eks-charts"
+  - name: aws-node-termination-handler
+    version: "0.16.0"
+    repository: "https://aws.github.io/eks-charts"
   - name: traefik
     version: "10.7.1"
     repository: "https://helm.traefik.io/traefik"
   - name: oauth2-proxy
     version: "5.0.6"
     repository: "https://oauth2-proxy.github.io/manifests"
-  - name: dagster-user-deployments
-    version: "0.12.5"
-    repository: "https://dagster-io.github.io/helm"
   - name: dagster
     version: "0.12.5"
     repository: "https://dagster-io.github.io/helm"
