@@ -1,19 +1,16 @@
 # yaml-language-server: $schema=eksctlschema-0.73.0.json
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-
 metadata:
   name: dagster-eks-in-sml-vpc
   region: eu-west-1
   version: "1.21"
-
 # fargateProfiles:
 #   - name: fp-test-3
 #     selectors:
 #       - namespace: faculty-dagster
 #         labels:
 #           instanceGroup: fargate
-
 vpc:
   subnets:
     public:
@@ -23,7 +20,6 @@ vpc:
         id: SUBNET_2_ID
       az3:
         id: SUBNET_3_ID
-
 managedNodeGroups:
   - name: dagster-c5-4xlarge
     instanceType: c5.4xlarge
@@ -42,4 +38,3 @@ managedNodeGroups:
       - 'eu-west-1a'
     labels:
       instanceGroup: prometheus
-
