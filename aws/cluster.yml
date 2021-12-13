@@ -2,7 +2,7 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: dagster-eks-in-sml-vpc
+  name: dagster-eks-in-existing-vpc
   region: eu-west-1
   version: "1.21"
 # fargateProfiles:
@@ -15,11 +15,11 @@ vpc:
   subnets:
     public:
       az1:
-        id: SUBNET_1_ID
+        id: null
       az2:
-        id: SUBNET_2_ID
+        id: null
       az3:
-        id: SUBNET_3_ID
+        id: null
 managedNodeGroups:
   - name: dagster-c5-4xlarge
     instanceType: c5.4xlarge
