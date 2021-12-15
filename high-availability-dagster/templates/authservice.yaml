@@ -1,3 +1,4 @@
+{{- if .Values.enableNodePort }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,4 +18,4 @@ spec:
     app.kubernetes.io/instance: faculty-dagster
     app.kubernetes.io/name: oauth2-proxy
   type: NodePort
-
+{{- end }}

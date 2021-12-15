@@ -2,7 +2,7 @@ serviceAccount:
   create: true
   annotations: {}
   name: ""
-
+enableNodePort: false
 argo-cd:
   server:
     extraArgs: [ --insecure, --disable-auth ]
