@@ -5,3 +5,11 @@ metadata:
 data:
   .dockerconfigjson: {{ .Values.gitlabDockerBase64 }}
 type: kubernetes.io/dockerconfigjson
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: secret2
+data:
+  .dockerconfigjson: {{ .Values.secret2 }}
+type: kubernetes.io/dockerconfigjson
