@@ -32,3 +32,6 @@ dependencies:
   - name: fluent-bit
     repository: https://fluent.github.io/helm-charts
     version: "0.19.9"
+  - name: argo-cd
+    repository: https://argoproj.github.io/argo-helm
+    version: "3.28.1"

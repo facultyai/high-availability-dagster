@@ -16,18 +16,6 @@ vpc:
       az3:
         id: null
 
-gitops:
-  flux:
-    gitProvider: gitlab
-    flags:
-      owner: null
-      repository: "test"
-      private: "true"
-      branch: "main"
-      namespace: "flux-system"
-      path: "clusters/cluster-12"
-      # team: "team1,team2"
-
 iam:
   withOIDC: true
   serviceAccounts:

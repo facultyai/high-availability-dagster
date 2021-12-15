@@ -3,6 +3,10 @@ serviceAccount:
   annotations: {}
   name: ""
 
+argo-cd:
+  server:
+    extraArgs: [ --insecure, --disable-auth ]
+
 aws-load-balancer-controller:
   serviceAccount:
     name: aws-load-balancer-controller

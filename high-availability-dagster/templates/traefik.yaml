@@ -14,6 +14,14 @@ spec:
       namespace: faculty-dagster
       passHostHeader: true
       port: 80  
+  - kind: Rule
+    match: Headers(`X-Forwarded-Host`, `{{ .Values.argocdHost }}`) # [3]
+    services:
+    - kind: Service
+      name: faculty-dagster-argocd-server
+      namespace: faculty-dagster
+      passHostHeader: true
+      port: 80  
   - kind: Rule                    # [9]  - kind: Rule
     match: Headers(`X-Forwarded-Host`, `{{ .Values.traefikHost }}`) # [3]
     # middlewares:

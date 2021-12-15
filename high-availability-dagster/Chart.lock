@@ -26,5 +26,8 @@ dependencies:
 - name: fluent-bit
   repository: https://fluent.github.io/helm-charts
   version: 0.19.9
-digest: sha256:8ee77c6fc99d44e8e481992e16816d8c8ecece340a27defcab4c82e818beca22
-generated: "2021-12-13T11:48:22.465037Z"
+- name: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  version: 3.28.1
+digest: sha256:b28a68e440a664e5d39c61d7738938c324fc0cdd267a44df84d58a771e711c3f
+generated: "2021-12-15T10:18:55.41644Z"
