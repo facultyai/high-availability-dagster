@@ -138,7 +138,7 @@ dagster:
     postgresqlSecretName: "dagster-postgresql-secret" # This is created by dagster.
     imagePullSecrets:
       - name: ucd-ci-example-puller
-      - name: secret2
+
 
 
 cluster-autoscaler:
