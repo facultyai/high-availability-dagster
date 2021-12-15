@@ -34,9 +34,6 @@ dagster:
     replicaCount: 2
     workspace:
       enabled: true
-      servers:
-        - host: "dagster-ucd-ci-example"
-          port: 3034
     envSecrets:
       - name: dagster-s3-storage-iam-creds
     nodeSelector:
