@@ -1,0 +1,7 @@
+{
+  "operationName": "RunRootQuery",
+  "variables": {
+    "runId": ""
+  },
+  "query": "query RunRootQuery($runId: ID!) {\n  pipelineRunOrError(runId: $runId) {\n    __typename\n    ... on Run {\n      id\n      status\n      __typename\n    }\n  }\n}\n"
+}

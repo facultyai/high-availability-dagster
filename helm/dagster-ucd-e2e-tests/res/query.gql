@@ -1,0 +1,54 @@
+mutation ReloadRepositoryLocationMutation($location: String!) {
+  reloadRepositoryLocation(repositoryLocationName: $location) {
+    __typename
+    ... on WorkspaceLocationEntry {
+      id
+      locationOrLoadError {
+        __typename
+        ... on RepositoryLocation {
+          repositories {
+            id
+            name
+            pipelines {
+              name
+            }
+          }
+        }
+        ... on Error {
+          message
+        }
+        ... on PythonError {
+          ...PythonErrorFragment
+        }
+      }
+      __typename
+    }
+    ... on UnauthorizedError {
+      message
+      __typename
+    }
+    ... on ReloadNotSupported {
+      message
+      __typename
+    }
+    ... on RepositoryLocationNotFound {
+      message
+      __typename
+    }
+    ... on PythonError {
+      ...PythonErrorFragment
+      __typename
+    }
+  }
+}
+
+fragment PythonErrorFragment on PythonError {
+  __typename
+  message
+  stack
+  cause {
+    message
+    stack
+    __typename
+  }
+}

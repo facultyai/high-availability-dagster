@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-load-workspace"
+  labels:
+    {{- toYaml .Values.podLabels | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  # imagePullSecrets:
+  nodeSelector:
+    {{- toYaml .Values.nodeSelector | nindent 4 }}
+  tolerations:
+    - effect: NoSchedule
+      key: instanceGroup
+      operator: Equal
+      value: dagster-services
+  restartPolicy: Never
+  containers:
+    - name: test
+      image: "ghcr.io/treebeardtech/k8s-utils:0.0.1"
+      command:
+        - /config/load-workspace.sh
+      args:
+        - {{ .Values.executionParams.selector.repositoryLocationName }}
+        - {{ .Values.dagitGraphQLUrl }}
+      volumeMounts:
+        - name: config
+          mountPath: "/config"
+  volumes:
+    - name: config
+      configMap:
+        name: {{ .Release.Name }}-configmap
+        defaultMode: 0777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+{{ (.Files.Glob "res/*").AsConfig | indent 2 }}

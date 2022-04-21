@@ -1,0 +1,12 @@
+apiVersion: v1
+entries:
+  dagster-ucd-e2e-tests:
+  - apiVersion: v2
+    created: "2022-04-21T09:13:55.18978+01:00"
+    digest: fba1dc192b2ba261ac25d0038fb983f7484c341fb237458ba898b941e9793970
+    name: dagster-ucd-e2e-tests
+    type: application
+    urls:
+    - dagster-ucd-e2e-tests-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-04-21T09:13:55.188303+01:00"

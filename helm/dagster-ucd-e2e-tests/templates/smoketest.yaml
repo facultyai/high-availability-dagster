@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-smoketest-dagster"
+  labels:
+  annotations:
+    "helm.sh/hook": test
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      imagePullSecrets:
+        - name: gitlab-dagster-infra-docker-config
+      restartPolicy: Never
+      containers:
+        - name: test
+          image: "ghcr.io/treebeardtech/k8s-utils:0.0.1"
+          command:
+            - bash
+            - -c
+            - |
+              /config/test.sh {{ .Values.dagitGraphQLUrl }}
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Release.Name }}-smoketest-dagster-configmap
+            defaultMode: 0777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-smoketest-dagster-configmap
+data:
+{{ (.Files.Glob "smoketest/*").AsConfig | indent 2 }}
+  launch.json: |-
+    {
+      "operationName": "LaunchPipelineExecution",
+      "variables": {
+        "executionParams":
+          {{ mustToPrettyJson .Values.executionParams | indent 8 }}
+      },
+      "query": "mutation LaunchPipelineExecution($executionParams: ExecutionParams!) {\n  launchPipelineExecution(executionParams: $executionParams) {\n    __typename\n    ... on LaunchRunSuccess {\n      run {\n        id\n        runId\n        pipelineName\n        __typename\n      }\n      __typename\n    }\n    ... on PipelineNotFoundError {\n      message\n      __typename\n    }\n    ... on RunConfigValidationInvalid {\n      errors {\n        message\n        __typename\n      }\n      __typename\n    }\n    ... on PythonError {\n      message\n      stack\n      __typename\n    }\n  }\n}\n"
+    }
