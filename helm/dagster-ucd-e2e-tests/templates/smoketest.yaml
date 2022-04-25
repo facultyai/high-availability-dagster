@@ -1,8 +1,10 @@
+{{- if .Values.launchPipelineExecution.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: "{{ .Release.Name }}-smoketest-dagster"
   labels:
+    {{- toYaml .Values.hooks.podLabels | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -10,7 +12,7 @@ spec:
   template:
     spec:
       nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
+        {{- toYaml .Values.hooks.nodeSelector | nindent 8 }}
       imagePullSecrets:
         - name: gitlab-dagster-infra-docker-config
       restartPolicy: Never
@@ -42,7 +44,8 @@ data:
       "operationName": "LaunchPipelineExecution",
       "variables": {
         "executionParams":
-          {{ mustToPrettyJson .Values.executionParams | indent 8 }}
+          {{ mustToPrettyJson .Values.launchPipelineExecution.executionParams | indent 8 }}
       },
       "query": "mutation LaunchPipelineExecution($executionParams: ExecutionParams!) {\n  launchPipelineExecution(executionParams: $executionParams) {\n    __typename\n    ... on LaunchRunSuccess {\n      run {\n        id\n        runId\n        pipelineName\n        __typename\n      }\n      __typename\n    }\n    ... on PipelineNotFoundError {\n      message\n      __typename\n    }\n    ... on RunConfigValidationInvalid {\n      errors {\n        message\n        __typename\n      }\n      __typename\n    }\n    ... on PythonError {\n      message\n      stack\n      __typename\n    }\n  }\n}\n"
     }
+{{- end }}

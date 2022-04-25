@@ -3,13 +3,13 @@ kind: Pod
 metadata:
   name: "{{ .Release.Name }}-load-workspace"
   labels:
-    {{- toYaml .Values.podLabels | nindent 4 }}
+    {{- toYaml .Values.hooks.podLabels | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
   # imagePullSecrets:
   nodeSelector:
-    {{- toYaml .Values.nodeSelector | nindent 4 }}
+    {{- toYaml .Values.hooks.nodeSelector | nindent 4 }}
   tolerations:
     - effect: NoSchedule
       key: instanceGroup
@@ -22,7 +22,7 @@ spec:
       command:
         - /config/load-workspace.sh
       args:
-        - {{ .Values.executionParams.selector.repositoryLocationName }}
+        - {{ .Values.launchPipelineExecution.executionParams.selector.repositoryLocationName }}
         - {{ .Values.dagitGraphQLUrl }}
       volumeMounts:
         - name: config

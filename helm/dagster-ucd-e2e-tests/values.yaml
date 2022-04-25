@@ -1,23 +1,35 @@
 # The location of your dagit console, e.g. "http://my-namespace-dagit/graphql"
 dagitGraphQLUrl: ""
 
-nodeSelector: {}
+# config for the pods which orchestrate the tests
+hooks:
+  labels: {}
+
+  nodeSelector: {}
+
+reloadRepositoryLocation:
+  # usually the hostname of your UCD deployment
+  # visible in https://{dagster}/workspace/{repo_name}@{repo_location_name}/jobs
+  repositoryLocationName: ""
 
 # params passed to LaunchPipelineExecution
-executionParams:
-  executionMetadata:
-    tags: []
-  mode: celery_k8s
-  runConfigData:
-    execution:
-      multiprocess:
-        config:
-          max_concurrent: 4
-    resources: {}
-    solids:
-      gridsearch_emit_run_configs:
-        config: {}
-  selector:
-    pipelineName: ""
-    repositoryLocationName: ""
-    repositoryName: ""
+launchPipelineExecution:
+  enabled: false
+  executionParams:
+    executionMetadata:
+      tags: []
+    mode: ""
+    runConfigData:
+      execution:
+        multiprocess:
+          config:
+            max_concurrent: 4
+      resources: {}
+      solids:
+        gridsearch_emit_run_configs:
+          config: {}
+    selector:
+      pipelineName: ""
+      repositoryName: ""
+      # same as above
+      repositoryLocationName: ""
