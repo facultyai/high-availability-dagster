@@ -22,7 +22,7 @@ spec:
       command:
         - /config/load-workspace.sh
       args:
-        - {{ .Values.launchPipelineExecution.executionParams.selector.repositoryLocationName }}
+        - {{ .Values.reloadRepositoryLocation.repositoryLocationName }}
         - {{ .Values.dagitGraphQLUrl }}
       volumeMounts:
         - name: config
